@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>
+      <title>Minimal Music Viewer</title>
+
+      <link rel="stylesheet" href="style.css">
+      <script src="script.js"></script>
+
+      <!-- <link rel="icon" href="favicon.ico" type="image/x=icon"-->
+    </title>
+  </head>
+
+  <body>
+    <h2>Minimal Music Viewer by greb.</h2>
+
+    <input class="search-input js-search-input" placeholder="Enter an artist..." onkeydown="checkKey(event);">
+
+    <p class="key-result js-key-result"></p>
+    <p class="search-result js-search-result">Search results appear here...</p>
+
+    <button class="search-button" onclick="getData();">Search</button>
+  </body>
+
+</html>

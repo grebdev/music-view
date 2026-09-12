@@ -11,14 +11,29 @@
   </head>
 
   <body>
-    <h2>Minimal Music Viewer by greb.</h2>
+    <div class="title-div">
+      <h2 class="title-text">Minimal Music Viewer by greb.</h2>
 
-    <input class="search-input js-search-input" placeholder="Enter an artist..." onkeydown="checkKey(event);">
+      <a href="https://github.com/grebdev/music-view" style="text-decoration: none;">
+        <button class="view-src-button">
+          <img class="social-logo" src="github_logo.svg" draggable="false">
+
+          <p class="social-text">View Source</p>
+        </button>
+      </a>
+    </div>
+
+    <div class="search-input-div">
+      <input class="search-input js-search-input" placeholder="Enter an artist..." onkeydown="checkKey(event);">
+
+      <button class="search-button" onclick="encodeURL();">Search</button>
+    </div>
 
     <p class="key-result js-key-result"></p>
-    <p class="search-result js-search-result">Search results appear here...</p>
 
-    <button class="search-button" onclick="getData();">Search</button>
+    <hr>
+
+    <div class="search-result-div js-search-result-div">Search results appear here...</div>
   </body>
 
 </html>

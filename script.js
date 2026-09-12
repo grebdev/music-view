@@ -1,18 +1,36 @@
-async function getData() {
+function encodeURL() {
   const inputVar = document.querySelector('.js-search-input');
-  const artist = inputVar.value;
+  const artistRaw = inputVar.value;
+  let artist = '';
 
-  displayText('.js-search-result');
+  for (let i = 0; i < artistRaw.length; i++) {
+    if (artistRaw[i] === ' ') {
+
+      if (artistRaw[(i - 1)] === ' ') {
+        artist += '';
+      } else {
+        artist += '+';
+      }
+    } else {
+      artist += artistRaw[i];
+    }
+  }
+  // This replaces spaces with one plus to encode URL
+  
+  displayHTML('.js-search-result-div');
   // If a user searches up another artist, clear Artist 1's results
 
-  const url = `https://itunes.apple.com/search?term=${artist}&entity=musicArtist`;
+
+  getData(artist);
+}
+
+async function getData(queryVar) {
+  const url = `https://itunes.apple.com/search?term=${queryVar}&entity=musicArtist`;
 
   const response = await fetch(url);
 
   if (!response.ok) {
-    displayText('.js-search-result', `<i> response info: ${response.status} </i>`, "w")
-
-    // If something is wrong, display error code 
+    displayHTML('.js-search-result-div', `<i> response info: ${response.status} </i>`, "w")
   } 
 
   const result = await response.json();
@@ -24,46 +42,50 @@ async function getData() {
 // MDN's guide to using fetch loops really helped: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
 function checkKey(event) {
-  displayText('.js-key-result', `<b>press: ${event.key}`, "w")
+  displayHTML('.js-key-result', `<b>press: ${event.key}`, "w")
 
   if (event.key === 'Enter') {
-    displayText('.js-key-result')
+    displayHTML('.js-key-result')
     // Clear key press tracker so data is central focus
 
-    getData();
+    encodeURL();
   }
 }
 
-function displayText(thing, text="", type="w") {
-  // If only the class is set, assume it overwrites data to blank text. 
-  // ... this is really helpful to clear text!!
+function displayHTML(thing, content="", type="w") {
+  // If only the class is set, assume it overwrites data to blank content. 
+  // ... this is really helpful to clear divs!
 
   if (type === "w") {
-    document.querySelector(`${thing}`).innerHTML = `<p>${text}</p>`;
+    document.querySelector(`${thing}`).innerHTML = `${content}`;
     // W for write
 
   } else if (type === "a") {
-    document.querySelector(`${thing}`).innerHTML += `<p>${text}</p>`;
+    document.querySelector(`${thing}`).innerHTML += `${content}`;
     // A for append
   }
 }
 
 function dataLoop(anyObject) {
   for (const value of Object.values(anyObject)) {
-  // the key is just result = "{Object}{Object}{Object} etc" so only the objects in the value are needed
+  // the key is just result = [{Object}{Object}{Object}] etc so only the objects in the value are needed
 
     if (typeof value === "undefined" || Array.isArray(value)) {
-    // The objects are stored in a list, but we want the individual object
 
       dataLoop(value);
-      // We need to try again until we get the object...
-      // So lookup the value (undefined -> list -> object!)
+      // We only need the object...
+      // So lookup the value until it is one! (undefined -> list -> object)
 
     } else {
-      const stringValue = JSON.stringify(value);
 
-      displayText('.js-search-result', `${stringValue}`, "a");
-      // Append each Artist result so they aren't overwritten
+      if (typeof value === "object") {
+        displayHTML('.js-search-result-div', `<a href=${value.artistLinkUrl}>${value.artistName}</p>`, "a");
+
+        displayHTML('.js-search-result-div', `<p>Genre: ${value.primaryGenreName}</p>`, "a");
+        displayHTML('.js-search-result-div', `<p>ID: ${value.artistId}</p>`, "a");
+
+        displayHTML('.js-search-result-div', `<br>`, "a");
+      }
     }
   }
 }

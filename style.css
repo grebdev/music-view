@@ -1,5 +1,19 @@
+body {
+  color: black;
+  background-color: white;
+}
+
+.body-dark-mode {
+  color: white;
+  background-color: black;
+}
+
 button {
   cursor: pointer;
+}
+
+.title-text {
+  margin-right: 50px;
 }
 
 .title-div, .view-src-button { 
@@ -9,11 +23,7 @@ button {
   /* Vertically align both divs*/
 }
 
-.title-text {
-  margin-right: 50px;
-}
-
-.search-button, .view-src-button {
+.search-button, .view-src-button, .dark-mode-button {
   height: 40px;
   border-radius: 4px;
   border: none;
@@ -24,6 +34,11 @@ button {
   justify-content: center;
   
   /* centering a div: https://www.w3schools.com/css/css_align.asp*/
+}
+
+.dark-mode-button {
+  margin-left: 20px;
+  width: 100px;
 }
 
 .social-logo {

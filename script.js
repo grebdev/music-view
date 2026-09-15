@@ -79,7 +79,7 @@ function dataLoop(anyObject) {
     } else {
 
       if (typeof value === "object") {
-        displayHTML('.js-search-result-div', `<a href=${value.artistLinkUrl}>${value.artistName}</p>`, "a");
+        displayHTML('.js-search-result-div', `<a href=${value.artistLinkUrl}>${value.artistName}</a>`, "a");
 
         displayHTML('.js-search-result-div', `<p>Genre: ${value.primaryGenreName}</p>`, "a");
         displayHTML('.js-search-result-div', `<p>ID: ${value.artistId}</p>`, "a");
@@ -88,4 +88,16 @@ function dataLoop(anyObject) {
       }
     }
   }
+}
+
+function modeSwitch() {
+  const modeButton = document.querySelector('.dark-mode-button')
+
+    if (modeButton.textContent === "Dark Mode") {
+      modeButton.textContent = "Light Mode";
+    } else {
+      modeButton.textContent = "Dark Mode";
+    }
+
+    document.body.classList.toggle("body-dark-mode");
 }

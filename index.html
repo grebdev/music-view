@@ -4,8 +4,8 @@
   <head>
       <title>Minimal Music Viewer</title>
 
-      <link rel="stylesheet" href="style.css">
-      <script src="script.js"></script>
+      <link rel="stylesheet" href="./styles/main.css">
+      <script src="./scripts/main.js"></script>
 
       <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
   </head>
@@ -16,7 +16,7 @@
 
       <a href="https://github.com/grebdev/music-view" style="text-decoration: none;">
         <button class="view-src-button">
-          <img class="social-logo" src="github_logo.svg" draggable="false">
+          <img class="social-logo" src="images/github_logo.svg" draggable="false">
 
           <p class="social-text">View Source</p>
         </button>
@@ -28,7 +28,7 @@
     <div class="search-input-div">
       <input class="search-input js-search-input" placeholder="Enter an artist..." onkeydown="checkKey(event);">
 
-      <button class="search-button" onclick="encodeURL();">Search</button>
+      <button class="search-button" onclick="displayHTML('.js-key-result'); encodeURL();">Search</button>
     </div>
 
     <p class="key-result js-key-result"></p>

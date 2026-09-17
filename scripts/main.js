@@ -20,7 +20,6 @@ function encodeURL() {
   displayHTML('.js-search-result-div');
   // If a user searches up another artist, clear Artist 1's results
 
-
   getData(artist);
 }
 
@@ -45,7 +44,7 @@ function checkKey(event) {
   displayHTML('.js-key-result', `<b>press: ${event.key}`, "w")
 
   if (event.key === 'Enter') {
-    displayHTML('.js-key-result')
+    displayHTML('.js-key-result');
     // Clear key press tracker so data is central focus
 
     encodeURL();
@@ -66,28 +65,29 @@ function displayHTML(thing, content="", type="w") {
   }
 }
 
-function dataLoop(anyObject) {
-  for (const value of Object.values(anyObject)) {
-  // the key is just result = [{Object}{Object}{Object}] etc so only the objects in the value are needed
+function dataLoop(mainObject) {
+  displayHTML('.js-search-result-div', `<p>${mainObject.resultCount} results</p>`, "a");
 
-    if (typeof value === "undefined" || Array.isArray(value)) {
+  displayHTML('.js-search-result-div', `<hr>`, "a");
 
-      dataLoop(value);
-      // We only need the object...
-      // So lookup the value until it is one! (undefined -> list -> object)
+  const resultList = mainObject.results;
 
-    } else {
+  for (let objectInList of resultList) {
+    displayHTML('.js-search-result-div', `<a href=${objectInList.artistLinkUrl}>${objectInList.artistName}</a>`, "a");
 
-      if (typeof value === "object") {
-        displayHTML('.js-search-result-div', `<a href=${value.artistLinkUrl}>${value.artistName}</a>`, "a");
-
-        displayHTML('.js-search-result-div', `<p>Genre: ${value.primaryGenreName}</p>`, "a");
-        displayHTML('.js-search-result-div', `<p>ID: ${value.artistId}</p>`, "a");
-
-        displayHTML('.js-search-result-div', `<br>`, "a");
-      }
+    if (objectInList.primaryGenreName !== undefined) {
+      displayHTML('.js-search-result-div', `<p>Genre: ${objectInList.primaryGenreName}</p>`, "a");
     }
+
+    displayHTML('.js-search-result-div', `<p>ID: ${objectInList.artistId}</p>`, "a");
+
+    displayHTML('.js-search-result-div', `<br>`, "a");
+
+    console.log(objectInList);
   }
+
+  console.log(mainObject);
+  console.log(resultList);
 }
 
 function modeSwitch() {

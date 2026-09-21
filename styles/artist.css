@@ -1,0 +1,12 @@
+.song-cover-img {
+  height: 200px;
+  width: 200px;
+}
+
+.song-cover-div, .song-result-div {
+  display: inline-block;
+}
+
+.song-result-div {
+  margin-left: 10px;
+}

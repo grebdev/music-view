@@ -1,0 +1,63 @@
+body {
+  color: black;
+  background-color: white;
+}
+
+.body-dark-mode {
+  color: white;
+  background-color: black;
+}
+
+button {
+  cursor: pointer;
+}
+
+.title-text {
+  margin-right: 50px;
+}
+
+.title-div, .view-src-button { 
+  display: flex;
+  align-items: center;
+
+  /* Vertically align both divs*/
+}
+
+.search-button, .view-src-button, .dark-mode-button {
+  height: 40px;
+  border-radius: 4px;
+  border: none;
+}
+
+.view-src-button {
+  width: 150px;
+  justify-content: center;
+  
+  /* centering a div: https://www.w3schools.com/css/css_align.asp*/
+}
+
+.dark-mode-button {
+  margin-left: 20px;
+  width: 100px;
+}
+
+.social-logo {
+  width: 30px;
+  height: 30px;
+}
+
+.social-text {
+  margin-left: 4px;
+}
+
+.search-button {
+  width: 100px;
+}
+
+.search-input {
+  height: 34px;
+}
+
+.search-result-div {
+  margin-bottom: 15px;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+      <title>Minimal Music Viewer</title>
+
+      <link rel="stylesheet" href="/music-view/styles/main.css">
+      <script src="/music-view/scripts/main.js"></script>
+
+      <!-- <link rel="stylesheet" href="/styles/main.css">
+      <script src="/scripts/main.js"></script> -->
+
+      <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+  </head>
+
+  <body>
+    <div class="title-div">
+      <h2 class="title-text">Minimal Music Viewer by greb.</h2>
+
+      <a href="https://github.com/grebdev/music-view" style="text-decoration: none;">
+        <button class="view-src-button">
+          
+          <img class="social-logo" src="/music-view/images/github_logo.svg" draggable="false">
+
+          <!-- <img class="social-logo" src="images/github_logo.svg" draggable="false"> -->
+
+          <p class="social-text">View Source</p>
+        </button>
+      </a>
+
+      <button class="dark-mode-button" onclick="modeSwitch();">Dark Mode</button>
+    </div>
+
+    <div class="search-input-div">
+      <input class="search-input js-search-input" placeholder="Enter an artist..." onkeydown="checkKey(event);">
+
+      <button class="search-button" onclick="displayHTML('.js-key-result'); encodeURL();">Search</button>
+    </div>
+
+    <p class="key-result js-key-result"></p>
+
+    <hr>
+
+    <div class="search-result-div js-search-result-div">Search results appear here...</div>
+  </body>
+
+</html>

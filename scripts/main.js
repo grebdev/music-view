@@ -73,8 +73,7 @@ function dataLoop(mainObject) {
   const resultList = mainObject.results;
 
   for (let objectInList of resultList) {
-    const resultLink = `artist?id=${objectInList.artistId}`
-    //const resultLink = `/artist?id=${objectInList.artistId}`
+    const resultLink = `../artist/?id=${objectInList.artistId}`
 
     displayHTML('.js-search-result-div', `<a href=${resultLink}>${objectInList.artistName}</a>`, "a");
 

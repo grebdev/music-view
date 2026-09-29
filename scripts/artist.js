@@ -18,7 +18,7 @@ function displayHTML(thing, content="", type="w") {
 // Modules didn't work, so for now it is pasted here
 
 async function getData(artistId) {
-  const url = `https://itunes.apple.com/lookup?id=${artistId}&entity=song`;
+  const url = `https://itunes.apple.com/lookup?id=${artistId}&entity=song&limit=50`;
 
   const response = await fetch(url);
 
@@ -71,7 +71,7 @@ function displayResult(resultList, startI, endI, isListen) {
 
     } else if (resultList[i].wrapperType === "track") {
 
-      const imageUrl = resultList[i].artworkUrl100.replace("100x100bb", "500x500bb");
+      const imageUrl = resultList[i].artworkUrl100.replace("100x100bb", "250x250bb");
 
       const resultIndex = resultList.indexOf(resultList[i])
       // The artist details are index 0

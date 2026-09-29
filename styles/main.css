@@ -9,6 +9,12 @@ body {
 }
 
 button {
+  height: 40px;
+  border-radius: 4px;
+  border: none;
+
+  padding: 4px;
+
   cursor: pointer;
 }
 
@@ -21,12 +27,6 @@ button {
   align-items: center;
 
   /* Vertically align both divs*/
-}
-
-.search-button, .view-src-button, .dark-mode-button {
-  height: 40px;
-  border-radius: 4px;
-  border: none;
 }
 
 .view-src-button {

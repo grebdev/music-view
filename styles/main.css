@@ -1,3 +1,7 @@
+body, .body-dark-mode {
+  transition: background-color 1s, color 1s;
+}
+
 body {
   color: black;
   background-color: white;
@@ -5,7 +9,7 @@ body {
 
 .body-dark-mode {
   color: white;
-  background-color: black;
+  background-color: #121212;
 }
 
 button {
@@ -36,7 +40,7 @@ button {
   /* centering a div: https://www.w3schools.com/css/css_align.asp*/
 }
 
-.dark-mode-button {
+.mode-button {
   margin-left: 20px;
   width: 100px;
 }
@@ -50,14 +54,28 @@ button {
   margin-left: 4px;
 }
 
+.search-input {
+  padding-left: 8px;
+  height: 34px;
+}
+
 .search-button {
   width: 100px;
 }
 
-.search-input {
-  height: 34px;
-}
-
 .search-result-div {
   margin-bottom: 15px;
+}
+
+.alone-result {
+  margin-bottom: 40px;
+}
+
+.result-link {
+  color: rgb(0, 0, 238);
+}
+
+.result-link:hover {
+  text-decoration: none;
+  color: #305CDE;
 }

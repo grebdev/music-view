@@ -1,3 +1,7 @@
+.song-result {
+  margin-bottom: 19px;
+}
+
 .song-cover-img {
   height: 200px;
   width: 200px;
@@ -8,5 +12,5 @@
 }
 
 .song-result-div {
-  margin-left: 10px;
+  margin-left: 15px;
 }

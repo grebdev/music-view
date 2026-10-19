@@ -1,39 +1,40 @@
+document.addEventListener("DOMContentLoaded", function () { 
+  
+  const searchButton = document.querySelector('.js-search-button');
+  const searchInput = document.querySelector('.js-search-input');
+
+  searchButton.addEventListener("click", function() {
+    document.querySelector('.js-key-result').textContent = '';
+    encodeURL();
+  });
+
+  searchInput.addEventListener("keydown", (event) => {
+    checkKey(event);
+  });
+});
+
 function encodeURL() {
   const inputVar = document.querySelector('.js-search-input');
   const artistRaw = inputVar.value;
-  let artist = '';
-
-  for (let i = 0; i < artistRaw.length; i++) {
-    if (artistRaw[i] === ' ') {
-
-      if (artistRaw[(i - 1)] === ' ') {
-        artist += '';
-      } else {
-        artist += '+';
-      }
-    } else {
-      artist += artistRaw[i];
-    }
-  }
-  // This replaces spaces with one plus to encode URL
   
-  displayHTML('.js-search-result-div');
+  const artist = encodeURIComponent(artistRaw);
+  
+  document.querySelector('.js-search-result-div').replaceChildren();
   // If a user searches up another artist, clear Artist 1's results
 
   getData(artist);
 }
 
 async function getData(queryVar) {
-  const url = `https://itunes.apple.com/search?term=${queryVar}&entity=musicArtist`;
+  const url = `https://itunes.apple.com/search?term=${queryVar}&entity=musicArtist&limit=50`;
 
   const response = await fetch(url);
 
   if (!response.ok) {
-    displayHTML('.js-search-result-div', `<i> response info: ${response.status} </i>`, "w")
+    document.querySelector('.js-search-result-div').textContent = `response info: ${response.status}`;
   } 
 
   const result = await response.json();
-  // Apple returns a JSON file for lookups that becomes an Object
 
   dataLoop(result);
 }
@@ -41,65 +42,65 @@ async function getData(queryVar) {
 // MDN's guide to using fetch loops really helped: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
 function checkKey(event) {
-  displayHTML('.js-key-result', `<b>press: ${event.key}`, "w")
+  keyResult = document.querySelector('.js-key-result');
+
+  keyResult.textContent = `press: ${event.key}`;
 
   if (event.key === 'Enter') {
-    displayHTML('.js-key-result');
+    keyResult.textContent = '';
     // Clear key press tracker so data is central focus
 
     encodeURL();
   }
 }
 
-function displayHTML(thing, content="", type="w") {
-  // If only the class is set, assume it overwrites data to blank content. 
-  // ... this is really helpful to clear divs!
-
-  if (type === "w") {
-    document.querySelector(`${thing}`).innerHTML = `${content}`;
-    // W for write
-
-  } else if (type === "a") {
-    document.querySelector(`${thing}`).innerHTML += `${content}`;
-    // A for append
-  }
-}
-
 function dataLoop(mainObject) {
-  displayHTML('.js-search-result-div', `<p>${mainObject.resultCount} result(s)</p>`, "a");
-
-  displayHTML('.js-search-result-div', `<hr>`, "a");
+  const resultDiv = document.querySelector('.js-search-result-div');
+  const docFrag = document.createDocumentFragment();
 
   const resultList = mainObject.results;
 
+  const resultCount = document.createElement("p");
+  resultCount.textContent = `${mainObject.resultCount} result(s)`;
+  docFrag.appendChild(resultCount);
+
+  docFrag.appendChild(document.createElement("hr"));
+
   for (let objectInList of resultList) {
-    const resultLink = `artist/?id=${objectInList.artistId}`
 
-    displayHTML('.js-search-result-div', `<a href=${resultLink}>${objectInList.artistName}</a>`, "a");
+    const aloneResult = document.createElement("div");
+    aloneResult.classList.add("alone-result");
+    docFrag.appendChild(aloneResult);
 
-    if (objectInList.primaryGenreName !== undefined) {
-      displayHTML('.js-search-result-div', `<p>Genre: ${objectInList.primaryGenreName}</p>`, "a");
+    const resultLink = document.createElement("a");
+    resultLink.classList.add("result-link");
+    resultLink.href = `artist/?id=${objectInList.artistId}`;
+    resultLink.textContent = `${objectInList.artistName}`;
+
+    aloneResult.appendChild(resultLink);
+
+    if (objectInList.primaryGenreName !== undefined) { 
+      const resultGenre = document.createElement("p");
+      resultGenre.textContent = `Genre: ${objectInList.primaryGenreName}`;
+      aloneResult.appendChild(resultGenre);
     }
 
-    displayHTML('.js-search-result-div', `<p>ID: ${objectInList.artistId}</p>`, "a");
-
-    displayHTML('.js-search-result-div', `<br>`, "a");
-
-    // console.log(objectInList);
+    const resultID = document.createElement("p");
+    resultID.textContent = `ID: ${objectInList.artistId}`;
+    aloneResult.appendChild(resultID);
   }
 
-  // console.log(mainObject);
-  // console.log(resultList);
+  resultDiv.appendChild(docFrag);
 }
 
 function modeSwitch() {
-  const modeButton = document.querySelector('.dark-mode-button')
+  const modeButton = document.querySelector('.mode-button');
 
-    if (modeButton.textContent === "Dark Mode") {
-      modeButton.textContent = "Light Mode";
-    } else {
-      modeButton.textContent = "Dark Mode";
-    }
+  if (modeButton.textContent === "Dark Mode") {
+    modeButton.textContent = "Light Mode";
+  } else {
+    modeButton.textContent = "Dark Mode";
+  }
 
-    document.body.classList.toggle("body-dark-mode");
+  document.body.classList.toggle("body-dark-mode");
 }

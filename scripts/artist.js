@@ -5,25 +5,13 @@ window.addEventListener("contextmenu", (e) => {
 // Prevent most of sneaky right clicks
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event
 
-function displayHTML(thing, content="", type="w") {
-  if (type === "w") {
-    document.querySelector(`${thing}`).innerHTML = `${content}`;
-    // W for write
-
-  } else if (type === "a") {
-    document.querySelector(`${thing}`).innerHTML += `${content}`;
-    // A for append
-  }
-}
-// Modules didn't work, so for now it is pasted here
-
 async function getData(artistId) {
   const url = `https://itunes.apple.com/lookup?id=${artistId}&entity=song&limit=50`;
 
   const response = await fetch(url);
 
   if (!response.ok) {
-    displayHTML('.js-artist-result-div', `<i> response info: ${response.status} </i>`, "w")
+    document.querySelector('.js-artist-result-div').textContent =  `response info: ${response.status}`;
   } 
 
   const result = await response.json();
@@ -31,9 +19,13 @@ async function getData(artistId) {
 }
 
 function dataLoop(mainObject) {
-  displayHTML('.js-title-result-div', `<p>${(mainObject.resultCount)} result(s)</p>`, "a")
+  const titleDiv = document.querySelector('.js-title-result-div');
 
-  displayHTML('.js-title-result-div', `<hr>`, "a");
+  const resultCount = document.createElement("p");
+  resultCount.textContent = `${(mainObject.resultCount)} result(s)`;
+  titleDiv.appendChild(resultCount);
+
+  titleDiv.appendChild(document.createElement("hr"));
 
   const resultList = mainObject.results;
 
@@ -46,12 +38,15 @@ function dataLoop(mainObject) {
 }
 
 function displayResult(resultList, startI, endI, isListen) {
-  //const audioList = [];
   // audioList can be local because all audio (usually) stops when new page is loaded
 
-  displayHTML('.js-artist-result-div');
+  const resultDiv = document.querySelector('.js-artist-result-div');
+  resultDiv.replaceChildren();
+
+  const docFrag = document.createDocumentFragment();
 
   for (let i = startI; i < endI; i++) {
+
     if (endI > resultList.length) {
       endI = resultList.length;
       document.querySelector('.js-load-button').disabled = true;
@@ -59,44 +54,77 @@ function displayResult(resultList, startI, endI, isListen) {
 
     if (resultList[i].wrapperType === "artist") {
 
-      displayHTML('.js-title-result-div', `<p>Name: ${resultList[i].artistName}</p>`, "a");
+      const titleDiv = document.querySelector('.js-title-result-div');
+
+      const artistName = document.createElement("p");
+      artistName.textContent = `Name: ${resultList[i].artistName}`;
+      titleDiv.appendChild(artistName);
 
       if (resultList[i].primaryGenreName !== undefined) {
-        displayHTML('.js-title-result-div', `<p>Genre: ${resultList[i].primaryGenreName}</p>`, "a");
+        const artistGenre = document.createElement("p");
+        artistGenre.textContent = `Genre: ${resultList[i].primaryGenreName}`;
+        titleDiv.appendChild(artistGenre);
       }
 
-      displayHTML('.js-title-result-div', `<p>ID: ${resultList[i].artistId}</p>`, "a");
+      const artistID = document.createElement("p");
+      artistID.textContent = `ID: ${resultList[i].artistId}`;
+      titleDiv.appendChild(artistID);
 
-      displayHTML('.js-title-result-div', `<br>`, "a");
+      titleDiv.appendChild(document.createElement("br"));
 
     } else if (resultList[i].wrapperType === "track") {
 
+      const aloneResult = document.createElement("div");
+      docFrag.appendChild(aloneResult);
+
       const imageUrl = resultList[i].artworkUrl100.replace("100x100bb", "250x250bb");
 
-      const resultIndex = resultList.indexOf(resultList[i])
-      // The artist details are index 0
+      const resultIndex = resultList.indexOf(resultList[i]) // The artist details are index 0
 
-      displayHTML('.js-artist-result-div', `
-        <div class="song-div">
+      aloneResult.classList.add("song-result");
 
-          <div class="song-cover-div">
-            <img class="song-cover-img" src="${imageUrl}" draggable="false">
-          </div>
+      // Cover Div
 
-          <div class="song-result-div">
-            <p>Song ${resultIndex}</p>
-            <p>${resultList[i].trackName}</p>
-            <p>in ${resultList[i].collectionName}</p>
+      const songCoverDiv = document.createElement("div");
+      songCoverDiv.classList.add("song-cover-div");
+      aloneResult.appendChild(songCoverDiv);
 
-            <audio id="audio-${resultIndex}" onplay="checkAudio(${resultIndex})" src="${resultList[i].previewUrl}" controlsList="nodownload" loading="lazy" preload="none" controls></audio>
-          </div>
-        
-        </div>
-      `, "a");
+      const songCoverImg = document.createElement("img");
+      songCoverImg.classList.add("song-cover-img");
+      songCoverImg.src = imageUrl;
+      songCoverImg.draggable = false;
+      songCoverDiv.appendChild(songCoverImg);
 
-      displayHTML('.js-artist-result-div', `<br>`, "a");
+      // Result Div
+
+      const songResultDiv = document.createElement("div");
+      songResultDiv.classList.add("song-result-div");
+      aloneResult.appendChild(songResultDiv);
+
+      const songIndex = document.createElement("p");
+      songIndex.textContent = `Song ${resultIndex}`;
+      songResultDiv.appendChild(songIndex);
+
+      const songTitle = document.createElement("p");
+      songTitle.textContent = resultList[i].trackName;
+      songResultDiv.appendChild(songTitle);
+
+      const albumName = document.createElement("p");
+      albumName.textContent = `in ${resultList[i].collectionName}`;
+      songResultDiv.appendChild(albumName);
+
+      const songAudio = document.createElement("audio");
+      songAudio.src = resultList[i].previewUrl;
+      songAudio.onplay = function() {checkAudio(resultIndex)};
+      songAudio.id = `audio-${resultIndex}`;
+      songAudio.controlsList = "nodownload";
+      songAudio.preload = "none";
+      songAudio.controls = true;
+      songResultDiv.appendChild(songAudio);
     } 
   }
+
+  resultDiv.appendChild(docFrag);
 
   if (!isListen) {
     listenToButton(resultList, startI, endI, isListen);
@@ -104,8 +132,6 @@ function displayResult(resultList, startI, endI, isListen) {
 }
 
 function listenToButton(resultList, startI, endI, isListen) {
-  // console.log("one time message");
-
   isListen = true;
   // The event listeners shouldn't duplicate as this function can only happen once now
 
@@ -132,28 +158,24 @@ function checkAudio(index) {
   listId = Array.from(document.querySelectorAll("audio"));
 
   for (id of listId) {
-    if (id === currentId) {
-      currentId.play();
-
-    } else {
+    if (id !== currentId) {
       id.pause();
+
+      // There was an infinite loop if I play the audio,
+      // because it triggers this function again
     }
   }
 }
 // Prevent multiple audio files playing at once
-// Because there will be that one person who tries..
 
-// Cannot pass in list due to scope conflicts
-// So I can pause every audio that isn't current id!
+// Cannot pass in list due to scope conflicts, so I can pause every audio that isn't current id
 
 document.addEventListener("DOMContentLoaded", function () {
-  // can't display HTML if it is not loaded yet
+  resultDiv = document.querySelector(".js-artist-result-div");
 
   const acceptableChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
   let isInt = true;
-
-  // Full URL: console.log(document.location);
 
   let params = new URLSearchParams(document.location.search);
 
@@ -172,10 +194,10 @@ document.addEventListener("DOMContentLoaded", function () {
       getData(id);
 
     } else {
-      displayHTML(".js-artist-result-div", "One or more characters is not an int", "w");
+      resultDiv.textContent = "One or more characters is not an int";
     }
 
   } else {
-    displayHTML(".js-artist-result-div", "Wrong type or length", "w");
+    resultDiv.textContent = "Wrong type or length";
   }
 });

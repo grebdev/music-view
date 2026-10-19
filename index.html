@@ -2,7 +2,7 @@
 
 <html>
   <head>
-      <title>Minimal Music Viewer</title>
+      <title>Music View - Home</title>
 
       <link rel="stylesheet" href="styles/main.css">
       <script src="scripts/main.js"></script>
@@ -14,7 +14,7 @@
     <div class="title-div">
       <h2 class="title-text">Minimal Music Viewer by greb.</h2>
 
-      <a href="https://github.com/grebdev/music-view" style="text-decoration: none;">
+      <a href="https://github.com/grebdev/music-view" target="_blank" style="text-decoration: none;">
         <button class="view-src-button">
           
           <img class="social-logo" src="images/github_logo.svg" draggable="false">
@@ -22,13 +22,13 @@
         </button>
       </a>
 
-      <button class="dark-mode-button" onclick="modeSwitch();">Dark Mode</button>
+      <button class="mode-button" onclick="modeSwitch();">Dark Mode</button>
     </div>
 
     <div class="search-input-div">
-      <input class="search-input js-search-input" placeholder="Enter an artist..." onkeydown="checkKey(event);">
+      <input class="search-input js-search-input" placeholder="Enter an artist...">
 
-      <button class="search-button" onclick="displayHTML('.js-key-result'); encodeURL();">Search</button>
+      <button class="search-button js-search-button">Search</button>
     </div>
 
     <p class="key-result js-key-result"></p>
